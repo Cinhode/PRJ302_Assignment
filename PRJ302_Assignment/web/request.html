@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Leave Request Form</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="CSS/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Leave Request </h1>
+            <div class="form-box">
+            <form action = "request/add" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="role">Role:</label>
+            <input type="text" id="role" name="role" required><br><br>
+
+            <label for="department">Department:</label>
+            <input type="text" id="department" name="department" required><br><br>
+
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="from" name="startDate" required><br><br>
+
+            <label for="endDate">End Date:</label>
+            <input type="date" id="to" name="endDate" required><br><br>
+
+            <label for="reason">Reason:</label><br>
+            <input type ="text" id="reason" name="reason"><br><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    </body>
+</html>
