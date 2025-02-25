@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="model.request"%>
+<%@page import="model.*"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,6 +15,13 @@
         <title>Request List</title>
     </head>
     <body>
-        <h1>Chỗ này để hiện đơn đã tạo của nvien</h1>
+       <h1>Welcome, ${sessionScope.user.username}!</h1>
+    <c:if test="${sessionScope.user.role == 'Quản lý'}">
+        <a href="/admin">Quản lý người dùng</a><br>
+    </c:if>
+    <c:if test="${sessionScope.user.role == 'USER'}">
+        <a href="/user">Xem thông tin cá nhân</a><br>
+    </c:if>
+    <a href="/logout">Logout</a>
     </body>
 </html>

@@ -16,6 +16,34 @@
         <servlet-name>WelcomeHomeController</servlet-name>
         <servlet-class>controller.home.WelcomeHomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateLeaveRequest</servlet-name>
+        <servlet-class>controller.request.CreateLeaveRequest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteLeaveRequest</servlet-name>
+        <servlet-class>controller.request.DeleteLeaveRequest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListLeaveRequest</servlet-name>
+        <servlet-class>controller.request.ListLeaveRequest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReceiveLeaveRequest</servlet-name>
+        <servlet-class>controller.request.ReceiveLeaveRequest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateLeaveRequest</servlet-name>
+        <servlet-class>controller.request.UpdateLeaveRequest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AgendaLeaveRequest</servlet-name>
+        <servlet-class>controller.request.AgendaLeaveRequest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewLeaveRequest</servlet-name>
+        <servlet-class>controller.request.ViewLeaverRequest</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AddLeaveRequest</servlet-name>
         <url-pattern>/request/add</url-pattern>
@@ -31,5 +59,33 @@
     <servlet-mapping>
         <servlet-name>WelcomeHomeController</servlet-name>
         <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateLeaveRequest</servlet-name>
+        <url-pattern>/request/create</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteLeaveRequest</servlet-name>
+        <url-pattern>/request/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListLeaveRequest</servlet-name>
+        <url-pattern>/request/list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceiveLeaveRequest</servlet-name>
+        <url-pattern>/request/receive</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateLeaveRequest</servlet-name>
+        <url-pattern>/request/update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AgendaLeaveRequest</servlet-name>
+        <url-pattern>/request/agenda</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewLeaveRequest</servlet-name>
+        <url-pattern>/request/view</url-pattern>
     </servlet-mapping>
 </web-app>

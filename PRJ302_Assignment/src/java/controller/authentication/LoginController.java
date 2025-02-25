@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controller.authentication;
-
 import dal.UserDBContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -13,12 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import model.User;
-
-/**
- *
- * @author admin
- */
-public class LoginController extends HttpServlet {
+public class LoginController extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,28 +20,27 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
         UserDBContext db = new UserDBContext();
         User user = db.get(username, password);
-        if(user != null){
+        if(user != null)
+        {
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
-            //write some cookies
-            Cookie c_user = new Cookie("username", password);
+            //write some cookie
+            Cookie c_user = new Cookie("username", username);
             c_user.setMaxAge(3600*24*30*12);
             resp.addCookie(c_user);
-            resp.sendRedirect("home");
-        
+            resp.sendRedirect("request");
         }
-        else {
+        else
+        {
             resp.getWriter().println("Access denied");
         }
-
+    
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("login.html").forward(req, resp);
+    
     }
-    
-    
-    
     
 }
