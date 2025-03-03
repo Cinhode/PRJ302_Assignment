@@ -15,7 +15,17 @@ public class User {
     private String password;
     private String displayname;
     private ArrayList<Role> roles = new ArrayList<>();
+    private Employee employee;
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    
     public ArrayList<Role> getRoles() {
         return roles;
     }

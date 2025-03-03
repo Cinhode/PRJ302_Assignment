@@ -15,13 +15,7 @@
         <title>Request List</title>
     </head>
     <body>
-       <h1>Welcome, ${sessionScope.user.username}!</h1>
-    <c:if test="${sessionScope.user.role == 'Quản lý'}">
-        <a href="/admin">Quản lý người dùng</a><br>
-    </c:if>
-    <c:if test="${sessionScope.user.role == 'USER'}">
-        <a href="/user">Xem thông tin cá nhân</a><br>
-    </c:if>
-    <a href="/logout">Logout</a>
+        <h1>Welcome, ${sessionScope.user.displayname}!</h1>
+        
     </body>
 </html>

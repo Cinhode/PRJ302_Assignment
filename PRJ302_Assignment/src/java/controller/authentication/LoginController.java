@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controller.authentication;
+import dal.EmployeeDBContext;
 import dal.UserDBContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import model.Employee;
 import model.User;
 public class LoginController extends HttpServlet{
 
@@ -22,17 +24,17 @@ public class LoginController extends HttpServlet{
         User user = db.get(username, password);
         if(user != null)
         {
+            EmployeeDBContext edb = new EmployeeDBContext();
+            Employee profile = edb.get(user.getEmployee().getId());
+            profile.setManager(user.getEmployee().getManager());
+            user.setEmployee(profile);
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
-            //write some cookie
-            Cookie c_user = new Cookie("username", username);
-            c_user.setMaxAge(3600*24*30*12);
-            resp.addCookie(c_user);
-            resp.sendRedirect("request");
+            resp.sendRedirect("home");
         }
         else
         {
-            resp.getWriter().println("Access denied");
+            resp.getWriter().println("Access denied!");
         }
     
     }

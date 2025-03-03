@@ -28,7 +28,7 @@ public class WelcomeHomeController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("home/welcome.jsp").forward(request, response);
+        request.getRequestDispatcher("home/home.jsp").forward(request, response);
        
     }
 

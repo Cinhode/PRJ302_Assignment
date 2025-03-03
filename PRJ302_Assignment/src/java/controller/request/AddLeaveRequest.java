@@ -27,15 +27,15 @@ public class AddLeaveRequest extends HttpServlet {
             String name = req.getParameter("name");
             String role = req.getParameter("role");
             String depart = req.getParameter("department");
-            String from = req.getParameter("from");
-            String to = req.getParameter("to");
+            String from = req.getParameter("start_date");
+            String to = req.getParameter("end_date");
             String reason = req.getParameter("reason");
             
             Request r = new Request();
             r.setName(name);
             r.setDepart(depart);
-            r.setFrom(Date.valueOf(from));
-            r.setTo(Date.valueOf(to));
+            r.setStart_date(Date.valueOf(from));
+            r.setEnd_date(Date.valueOf(to));
             r.setRole(role);
             r.setReason(reason);
             

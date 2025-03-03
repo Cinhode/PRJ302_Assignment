@@ -17,16 +17,8 @@
         <servlet-class>controller.home.WelcomeHomeController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CreateLeaveRequest</servlet-name>
-        <servlet-class>controller.request.CreateLeaveRequest</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>DeleteLeaveRequest</servlet-name>
         <servlet-class>controller.request.DeleteLeaveRequest</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ListLeaveRequest</servlet-name>
-        <servlet-class>controller.request.ListLeaveRequest</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ReceiveLeaveRequest</servlet-name>
@@ -61,16 +53,8 @@
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreateLeaveRequest</servlet-name>
-        <url-pattern>/request/create</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>DeleteLeaveRequest</servlet-name>
         <url-pattern>/request/delete</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ListLeaveRequest</servlet-name>
-        <url-pattern>/request/list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ReceiveLeaveRequest</servlet-name>

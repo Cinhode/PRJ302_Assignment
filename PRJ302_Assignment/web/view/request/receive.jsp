@@ -1,6 +1,6 @@
 <%-- 
-    Document   : welcome.jsp
-    Created on : Feb 22, 2025, 3:52:01 PM
+    Document   : receive.jsp
+    Created on : Feb 27, 2025, 12:46:02 AM
     Author     : admin
 --%>
 
@@ -9,10 +9,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP</title>
+        <title>JSP Page</title>
     </head>
     <body>
-        <h1>Phân quyền?</h1>
-        <<h1>${sessionScope.user.displayname}</h1>>
+        <h1>Chỗ này để xem và xử lý đơn</h1>
     </body>
 </html>
