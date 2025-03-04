@@ -22,9 +22,6 @@
     <c:forEach items="${sessionScope.user.employee.staffs}" var="s"> 
         ${s.name} <br/>
     </c:forEach>
-    <h2>Hiển thị các tính năng dựa trên role </h2>
-    <a href="request/add"> Tạo request </a><br><br>
-    <%-- Lỗi gì đó ?? k sài dc css cho request.html--%>
-    <a href="request/agenda"> Xem agenda(Check phân quyền)FAIL!! </a>
+    
 </body>
 </html>
