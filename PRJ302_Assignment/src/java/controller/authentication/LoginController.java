@@ -30,7 +30,7 @@ public class LoginController extends HttpServlet{
             user.setEmployee(profile);
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
-            resp.sendRedirect("home");
+            resp.sendRedirect("index.html");
         }
         else
         {
