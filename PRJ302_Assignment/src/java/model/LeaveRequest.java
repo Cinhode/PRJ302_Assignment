@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
+
 import java.sql.Date;
 
 /**
@@ -10,13 +11,21 @@ import java.sql.Date;
  * @author admin
  */
 public class LeaveRequest extends BaseModel {
-   private String title;
+
+    private String title;
     private String reason;
     private Date from;
     private Date to;
     private int status;
     private Employee owner;
     private User processedby;
+
+    @Override
+    public String toString() {
+        return super.toString(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    
 
     public String getTitle() {
         return title;
@@ -73,6 +82,5 @@ public class LeaveRequest extends BaseModel {
     public void setProcessedby(User processedby) {
         this.processedby = processedby;
     }
-    
-    
+
 }

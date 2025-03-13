@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import model.LeaveRequest;
@@ -26,23 +27,23 @@ public class CreateLeaveRequest extends BaseRequiredAuthenticationController {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
         LeaveRequest lr = new LeaveRequest();
-        lr.setCreatedby(user);
-        lr.setCreateddate(Date.valueOf(req.getParameter("createddate")));
+        HttpSession session = req.getSession();
+        lr.setCreatedby(((User)session.getAttribute("user")).getEmployee());
         lr.setFrom(Date.valueOf(req.getParameter("from")));
         lr.setTo(Date.valueOf(req.getParameter("to")));
-        lr.setId(Integer.parseInt(req.getParameter("lrid")));
         lr.setReason(req.getParameter("reason"));
-        lr.setStatus(Integer.parseInt(req.getParameter("status")));
         lr.setTitle(req.getParameter("title"));
 
         Employee e = new Employee();
-        e.setId(Integer.parseInt(req.getParameter("eid")));
-        e.setName(req.getParameter("ename"));
+
+        e.setId(user.getEmployee().getId());
+        e.setName(user.getEmployee().getName());
         lr.setOwner(e);
 
         LeaveRequestDBContext db = new LeaveRequestDBContext();
+        session.setAttribute("recentleaverequest", lr);
         db.insert(lr);
-        //req.getRequestDispatcher("../view/insert.jsp").forward(req, resp);
+        req.getRequestDispatcher("../view/home/home.jsp").forward(req, resp);
 
     }
 
@@ -55,7 +56,7 @@ public class CreateLeaveRequest extends BaseRequiredAuthenticationController {
         }
         req.setAttribute("employees", employees);
 
-        //req.getRequestDispatcher("leaverequest/create.jsp").forward(req, resp);
+        req.getRequestDispatcher("/view/request/leaverequest.jsp").forward(req, resp);
     }
 
 }

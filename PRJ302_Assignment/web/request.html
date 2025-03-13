@@ -8,34 +8,35 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <title>Leave Request Form</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="style/css.css" rel="stylesheet">
-
+        <link rel="stylesheet" href="style/style.css">
     </head>
     <body>
-        <h1>Leave Request</h1>
-        <div class="form-box">
-            <form action = "request/add" method="POST">
-                <label for="namec">Name:</label>
-                <input type="text" id="name" name="name" required><br><br>
 
-                <label for="role">Role:</label>
-                <input type="text" id="role" name="role" required><br><br>
+        <div class="leaverequest-container">
+            <h2>Leave Request</h2>
+            <form action = "request/add" method="POST" class="login-form">
 
-
-                <label for="department">Department:</label>
-                <input type="text" id="department" name="department" required><br><br>
-
-
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="from" name="start_date" required><br><br>
-
-                <label for="endDate">End Date:</label>
-                <input type="date" id="to" name="end_date" required><br><br>
-
-                <label for="reason">Reason:</label><br>
-                <input type ="text" id="reason" name="reason"><br><br>
-
-                <input type="submit" value="Submit">
+                <div class="input-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required><br><br>
+                </div>
+                <div class="input-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required><br><br>
+                </div>
+                <div class="input-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="from" name="from" required><br><br>
+                </div>
+                <div class="input-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="to" name="to" required><br><br>
+                </div>
+                <div class="input-group">
+                    <label for="reason">Reason:</label><br>
+                    <textarea id="reason" name="reason" rows="9" cols="58" required></textarea><br><br>
+                </div>
+                <input type="submit" class="btn" value="Submit">
             </form>
         </div>
     </body>

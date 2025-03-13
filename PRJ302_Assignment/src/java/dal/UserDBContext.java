@@ -4,6 +4,7 @@
  */
 package dal;
 
+import static java.lang.System.out;
 import java.util.ArrayList;
 import model.User;
 import java.sql.*;
@@ -21,20 +22,18 @@ public class UserDBContext extends DBContext<User> {
     public User get(String username, String password) {
         try {
             String sql = "SELECT u.username,u.displayname\n"
-                    + "                                     ,r.rid, r.rname\n"
-                    + "                                     ,f.fid,f.url\n"
-                    + "                 				,e.eid, e.ename\n"
-                    + "                				,m.eid as [managerid]\n"
-                    + "                    				,m.ename as [managerename]\n"
-                    + "                                     FROM Users u \n"
-                    + "                  				INNER JOIN Employees e ON e.eid = u.eid\n"
-                    + "                 				LEFT JOIN Employees m ON e.managerid = m.eid\n"
-                    + "     				LEFT JOIN User_Role ur ON ur.username = u.username\n"
-                    + "                        LEFT JOIN Roles r ON r.rid = ur.rid\n"
-                    + "						\n"
-                    + "                          LEFT JOIN Role_Feature rf ON r.rid = rf.rid\n"
-                    + "						  LEFT JOIN Features f ON f.fid = rf.fid\n"
-                    + "                   "
+                    + "                    ,r.rid, r.rname\n"
+                    + "                    ,f.fid,f.url\n"
+                    + "					,e.eid, e.ename\n"
+                    + "					,m.eid as [managerid]\n"
+                    + "					,m.ename as [managerename]\n"
+                    + "                    FROM Users u \n"
+                    + "					INNER JOIN Employees e ON e.eid = u.eid\n"
+                    + "					LEFT JOIN Employees m ON e.managerid = m.eid\n"
+                    + "					LEFT JOIN User_Role ur ON ur.username = u.username\n"
+                    + "                    LEFT JOIN Roles r ON r.rid = ur.rid\n"
+                    + "                    LEFT JOIN Role_Feature rf ON r.rid = rf.rid\n"
+                    + "                    LEFT JOIN Features f ON f.fid = rf.fid\n"
                     + "                    WHERE u.username = ? AND u.password = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, username);
@@ -49,17 +48,18 @@ public class UserDBContext extends DBContext<User> {
                     user.setUsername(username);
                     user.setDisplayname(rs.getNString("displayname"));
                     Employee e = new Employee();
-                    int id = rs.getInt("eid");
                     e.setId(rs.getInt("eid"));
-                    e.setName("ename");
+                    e.setName(rs.getString("ename"));
                     user.setEmployee(e);
                     int managerid = rs.getInt("managerid");
-                    if (managerid != 0) {
+                    if(managerid!=0)
+                    {
                         Employee m = new Employee();
                         m.setId(managerid);
-                        m.setName(rs.getNString("managerename"));
+                        m.setName(rs.getString("managerename"));
                         e.setManager(m);
                     }
+                    
                 }
                 int rid = rs.getInt("rid");
                 if (rid > 0 && rid != current_role.getId()) {
@@ -71,26 +71,26 @@ public class UserDBContext extends DBContext<User> {
                 }
 
                 int fid = rs.getInt("fid");
-                if (rid > 0) {
+                if (fid > 0) {
                     Feature f = new Feature();
                     f.setId(fid);
                     f.setUrl(rs.getString("url"));
-                    f.getRoles().add(current_role);
                     current_role.getFeatures().add(f);
+                    f.getRoles().add(current_role);
                 }
             }
             return user;
         } catch (SQLException ex) {
             Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (connection != null)               
-                    try {
+            if (connection != null)
+                try {
                 connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
+
         return null;
     }
 

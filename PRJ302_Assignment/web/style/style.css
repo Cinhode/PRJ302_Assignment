@@ -1,7 +1,7 @@
 /* style.css */
 * {
     font-family: "Ubuntu", sans-serif;
-    margin: 0;
+    margin: 1px;
     padding: 2px;
     box-sizing: border-box;
 }
@@ -16,15 +16,22 @@ body {
 }
 
 .login-container {
+    width: 80%; /* Chiếm 80% chiều rộng màn hình */
+    padding: 2% 5%;
     background: #f5f5f5;
     padding: 20px 40px;
-    border-radius: 10px;
+    border-radius: 20px;
     box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--blue);
     text-align: center;
     color: #2a2185;
     width: 500px;
     border-color: #2a2185;
+    border-width: 2px ;
+    border: 2px solid #2a2185 ;
+    
 }
+
 .login-form h2 {
     margin-bottom: 15px;
     border-radius: 20px;
@@ -33,13 +40,14 @@ body {
 }
 
 .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 1px;
     text-align: left;
 }
 
 .input-group label {
     display: block;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .input-group input {
@@ -54,14 +62,68 @@ body {
 .btn {
     background: #261c83;
     color: #f5f5f5;
-    padding: 10px;
+    padding: 13px;
     border: none;
     border-radius: 20px;
     cursor: pointer;
     width: 80%;
     font-size: 16px;
+    margin-bottom: 5px;
+    margin-top: 15px;
 }
 
 .btn:hover {
     background: #999;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    .login-container {
+        width: 95%; /* Nếu màn hình nhỏ hơn 600px, box rộng hơn */
+        padding: 5%;
+}
+}
+
+.leaverequest-container{
+    width: 80%; /* Chiếm 80% chiều rộng màn hình */
+    max-height: 100%;
+    padding: 2% 5%;
+    background: #f5f5f5;
+    padding: 20px 40px;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--blue);
+    text-align: center;
+    color: #2a2185;
+    width: 500px;
+    border-color: #2a2185;
+    border-width: 2px ;
+    border: 2px solid #2a2185 ;
+    overflow: auto;  
+}
+
+::-webkit-scrollbar {
+  width: 6px; /* Độ rộng thanh cuộn dọc */
+  height: 2px; /* Độ cao thanh cuộn ngang */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2a2185; /* Màu khi hover */
+}
+
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px; /* Bo tròn mép */
 }

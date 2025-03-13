@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controller.authentication;
+
 import dal.EmployeeDBContext;
+import dal.LeaveRequestDBContext;
 import dal.UserDBContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -12,9 +14,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import model.Employee;
+import model.LeaveRequest;
 import model.User;
-public class LoginController extends HttpServlet{
+
+public class LoginController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -22,27 +27,28 @@ public class LoginController extends HttpServlet{
         String password = req.getParameter("password");
         UserDBContext db = new UserDBContext();
         User user = db.get(username, password);
-        if(user != null)
-        {
+        if (user != null) {
             EmployeeDBContext edb = new EmployeeDBContext();
             Employee profile = edb.get(user.getEmployee().getId());
             profile.setManager(user.getEmployee().getManager());
             user.setEmployee(profile);
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
-            resp.sendRedirect("index.html");
+            LeaveRequestDBContext ldb = new LeaveRequestDBContext();
+            ArrayList<LeaveRequest> ls = new ArrayList();
+            ls = ldb.list();
+            session.setAttribute("leaverequest", ls);
+            resp.getWriter().println(ls);
+            //resp.sendRedirect("home");
+        } else {
+            resp.getWriter().println("Access denied!");
         }
-        else
-        {
-            resp.getWriter().println("Access denied!?????????");
-        }
-    
+
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("login.html").forward(req, resp);
-    
+
     }
-    
+
 }

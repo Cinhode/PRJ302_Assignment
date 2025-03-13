@@ -10,9 +10,16 @@ import java.util.*;
  */
 public abstract class BaseModel {
     private int id;
-    private User createdby;
+    private Employee createdby;
     private Date createddate;
 
+    @Override
+    public String toString() {
+        return "BaseModel{" + "id=" + id + ", createdby=" + createdby + ", createddate=" + createddate + '}';
+    }
+
+    
+    
     public int getId() {
         return id;
     }
@@ -21,11 +28,11 @@ public abstract class BaseModel {
         this.id = id;
     }
 
-    public User getCreatedby() {
+    public Employee getCreatedby() {
         return createdby;
     }
 
-    public void setCreatedby(User createdby) {
+    public void setCreatedby(Employee createdby) {
         this.createdby = createdby;
     }
 

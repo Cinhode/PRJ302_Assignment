@@ -14,8 +14,16 @@ public class User {
     private String username;
     private String password;
     private String displayname;
-    private ArrayList<Role> roles = new ArrayList<>();
     private Employee employee;
+    private ArrayList<Role> roles = new ArrayList<>();
+
+    public ArrayList<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(ArrayList<Role> roles) {
+        this.roles = roles;
+    }
 
     public Employee getEmployee() {
         return employee;
@@ -24,16 +32,6 @@ public class User {
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
-
-    
-    public ArrayList<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(ArrayList<Role> roles) {
-        this.roles = roles;
-    }
-    
 
     public String getUsername() {
         return username;

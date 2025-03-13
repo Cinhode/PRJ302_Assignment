@@ -16,6 +16,11 @@
     --black1: #222;
     --black2: #999;
 }
+.content-area{
+    
+      
+}
+
 
 body {
     min-height: 100vh;
@@ -271,10 +276,10 @@ body {
 
 .details .recentOrders {
     position: relative;
-    display: grid;
-    min-height: 500px;
+/*    display: grid;*/
+    min-height: fit-content;
     background: var(--white);
-    padding: 20px;
+    padding: 10px;
     box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
     border-radius: 20px;
 }
@@ -283,6 +288,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    min-height: fit-content;
 }
 .cardHeader h2 {
     font-weight: 600;

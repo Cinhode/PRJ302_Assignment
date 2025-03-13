@@ -11,12 +11,22 @@ import java.util.ArrayList;
  * @author admin
  */
 public class Employee {
+
     private int id;
     private String name;
     private Employee manager;
     private Department dept;
     private ArrayList<Employee> staffs = new ArrayList<>();
     private ArrayList<Employee> directstaffs = new ArrayList<>();
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public int getId() {
         return id;
@@ -65,13 +75,5 @@ public class Employee {
     public void setDirectstaffs(ArrayList<Employee> directstaffs) {
         this.directstaffs = directstaffs;
     }
-    
-   
-    
-    
-    
-   
-    
-    
-    
+
 }
