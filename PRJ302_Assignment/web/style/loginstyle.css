@@ -29,15 +29,21 @@ body {
     border-color: #2a2185;
     border-width: 2px ;
     border: 2px solid #2a2185 ;
-    
+
 }
 
 .login-form h2 {
     margin-bottom: 15px;
     border-radius: 20px;
     border-color: #261c83;
-    
 }
+
+.leaverequest-form h2 {
+    margin-bottom: 15px;
+    border-radius: 20px;
+    border-color: #261c83;
+}
+
 
 .input-group {
     margin-bottom: 1px;
@@ -93,7 +99,7 @@ body {
     .login-container {
         width: 95%; /* Nếu màn hình nhỏ hơn 600px, box rộng hơn */
         padding: 5%;
-}
+    }
 }
 
 .leaverequest-container{
@@ -111,19 +117,19 @@ body {
     border-color: #2a2185;
     border-width: 2px ;
     border: 2px solid #2a2185 ;
-    overflow: auto;  
+    overflow: auto;
 }
 
 ::-webkit-scrollbar {
-  width: 6px; /* Độ rộng thanh cuộn dọc */
-  height: 2px; /* Độ cao thanh cuộn ngang */
+    width: 6px; /* Độ rộng thanh cuộn dọc */
+    height: 2px; /* Độ cao thanh cuộn ngang */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a2185; /* Màu khi hover */
+    background: #2a2185; /* Màu khi hover */
 }
 
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 5px; /* Bo tròn mép */
+    border-radius: 5px; /* Bo tròn mép */
 }

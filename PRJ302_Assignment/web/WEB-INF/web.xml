@@ -40,6 +40,10 @@
         <servlet-name>CreateLeaveRequest</servlet-name>
         <servlet-class>controller.request.CreateLeaveRequest</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewAllHome</servlet-name>
+        <jsp-file>/view/home/viewallhome.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AddLeaveRequest</servlet-name>
         <url-pattern>/request/add</url-pattern>
@@ -79,5 +83,9 @@
     <servlet-mapping>
         <servlet-name>CreateLeaveRequest</servlet-name>
         <url-pattern>/request/create</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAllHome</servlet-name>
+        <url-pattern>/home/view</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -1,44 +1,149 @@
-<%-- 
-    Document   : leaverequest
-    Created on : Mar 12, 2025, 6:21:16 PM
-    Author     : admin
---%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Leave Request</title>
-        <link rel="stylesheet" href="../style/style.css">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Leave Request Manager</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
     </head>
     <body>
-        <div class="leaverequest-container">
-            <h2>Leave Request</h2>
-            <form action = "create" method="POST" class="login-form">
+        <div class="container">
+            <div class="navigation">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="logo-octocat"></ion-icon>
+                            </span>
+                            <span class="title">Leave Request Manager</span>
+                        </a>
+                    </li>
+                    <li> <%-- DASHBROAD   --%>
+                        <a href="http://localhost:8080/Assignment/home">
+                            <span class="icon">
+                                <ion-icon name="home-outline"></ion-icon>
+                            </span>
+                            <span class="title">Dashboard</span>
+                        </a>
+<!--                    </li><%-- CUSTOMER   --%>
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="people-outline"></ion-icon>
+                            </span>
+                            <span class="title">Customers</span>
+                        </a>
+                    </li>-->
+                    <li><%-- CREATE   --%>
+                        <a href="http://localhost:8080/Assignment/request/create">
+                            <span class="icon">
+                                <ion-icon name="chatbubble-outline"></ion-icon>
+                            </span>
+                            <span class="title">Create</span>
+                        </a>
+                    </li>
+                    <li><%-- VIEW   --%>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="eye-outline"></ion-icon>
+                            </span>
+                            <span class="title">View</span>
+                        </a>
+                    </li>
+                    <li><%-- AGENDA   --%>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="stats-chart-outline"></ion-icon>
+                            </span>
+                            <span class="title">Agenda</span>
+                        </a>
+                    </li>
+                    <li> <%-- HOME-DONE --%>
+                        <a href="${pageContext.request.contextPath}/login">
+                            <span class="icon">
+                                <ion-icon name="log-out-outline"></ion-icon>
+                            </span>
+                            <span class="title">Sign Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="main">
+                <div class="topbar">
+                    <div class="toggle">
+                        <ion-icon name="menu-outline"></ion-icon>
+                    </div><%-- SEARCH  --%>
+                    <div class="search">
+                        <label>
+                            <input type="text" placeholder="Search here">
+                            <ion-icon name="search-outline"></ion-icon>
+                        </label>
+                    </div>
+                    <div class="user">
+                        <img src="${pageContext.request.contextPath}/assets/image/usericon.png" alt="User">
+                    </div>
+                </div>
+                <div class="details">
+                    <div class="recentOrders">
+                        <div class="cardHeader">
+                            <h2>Recent Leave Request</h2>
+                            <a href="#" class="btn">View All</a>
+                        </div>
+                        <div class="leaverequest-container" >
+                            <h2>Leave Request</h2>
+                            <form action = "request/create" method="POST" class="login-form">
 
-                <div class="input-group">
-                    <label for="title">Title:</label>
-                    <input type="text" id="title" name="title" required><br>
+                                <div class="input-group">
+                                    <label for="title">Title:</label>
+                                    <input type="text" id="title" name="title" required><br>
+                                </div>
+                                <div class="input-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" id="name" name="name" value="${sessionScope.user.employee.name}" required><br>
+                                </div>
+                                <div class="input-group">
+                                    <label for="startDate">Start Date:</label>
+                                    <input type="date" id="from" name="from" required><br>
+                                </div>
+                                <div class="input-group">
+                                    <label for="endDate">End Date:</label>
+                                    <input type="date" id="to" name="to" required><br>
+                                </div>
+                                <div class="input-group">
+                                    <label for="reason">Reason:</label><br>
+                                    <textarea id="reason" name="reason" rows="9" cols="59" required></textarea><br><br>
+                                </div>
+                                <input type="submit" class="btn" value="Submit">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="recentCustomers">
+                        <div class="cardHeader">
+                            <h2>Your Staff</h2>
+                        </div>
+                        <table>
+                            <c:forEach items="${sessionScope.user.employee.staffs}" var="s">
+                                <tr>
+                                    <td width="60px">
+                                        <div class="imgBx"><img src="${pageContext.request.contextPath}/assets/image/usericon.png" alt="User"></div>
+                                    </td>
+                                    <td>
+                                        <h4>${s.name} <br> <span>${s.dept.name}</span></h4>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" value="${sessionScope.user.employee.name}" required><br>
-                </div>
-                <div class="input-group">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" id="from" name="from" required><br>
-                </div>
-                <div class="input-group">
-                    <label for="endDate">End Date:</label>
-                    <input type="date" id="to" name="to" required><br>
-                </div>
-                <div class="input-group">
-                    <label for="reason">Reason:</label><br>
-                    <textarea id="reason" name="reason" rows="9" cols="59" required></textarea><br><br>
-                </div>
-                <input type="submit" class="btn" value="Submit">
-            </form>
+            </div>
         </div>
+        <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     </body>
 </html>

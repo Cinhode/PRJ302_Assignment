@@ -28,7 +28,7 @@ public class CreateLeaveRequest extends BaseRequiredAuthenticationController {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
         LeaveRequest lr = new LeaveRequest();
         HttpSession session = req.getSession();
-        lr.setCreatedby(((User)session.getAttribute("user")).getEmployee());
+        lr.setCreatedby(((User) session.getAttribute("user")).getEmployee());
         lr.setFrom(Date.valueOf(req.getParameter("from")));
         lr.setTo(Date.valueOf(req.getParameter("to")));
         lr.setReason(req.getParameter("reason"));
@@ -41,10 +41,13 @@ public class CreateLeaveRequest extends BaseRequiredAuthenticationController {
         lr.setOwner(e);
 
         LeaveRequestDBContext db = new LeaveRequestDBContext();
-        session.setAttribute("recentleaverequest", lr);
         db.insert(lr);
-        req.getRequestDispatcher("../view/home/home.jsp").forward(req, resp);
-
+        
+        LeaveRequestDBContext ldb = new LeaveRequestDBContext();
+        ArrayList<LeaveRequest> ls = ldb.list();
+        session.setAttribute("leaverequest", ls);
+        
+        resp.sendRedirect(req.getContextPath() + "/home");
     }
 
     @Override
@@ -55,7 +58,6 @@ public class CreateLeaveRequest extends BaseRequiredAuthenticationController {
             employees.add(staff);
         }
         req.setAttribute("employees", employees);
-
         req.getRequestDispatcher("/view/request/leaverequest.jsp").forward(req, resp);
     }
 

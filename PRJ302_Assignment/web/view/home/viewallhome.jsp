@@ -103,14 +103,14 @@
                                     <td>Title</td>
                                     <td class="tddate">From</td>
                                     <td class="tddate">To</td>
-                                    <!--<td>Reason</td>-->
+                                    <td>Reason</td>
                                     <td>Status</td>
                                     <td>Processor</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="request" items="${leaverequest}">
-                                    <c:if test="${fn:contains(request.status, 'Pending')}">
+                                    <%--<c:if test="${fn:contains(request.status, 'Pending')}">--%>
                                         <tr>
                                             <!--<td>${request.id}</td>-->
 
@@ -118,14 +118,14 @@
                                             <td>${request.title}</td>
                                             <td>${request.from}</td>
                                             <td>${request.to}</td>
-                                            <!--<td>${request.reason}</td>-->
+                                            <td>${request.reason}</td>
 
-                                            <td><span class="status Pending">${request.status}</span></td>
+                                            <td><span class="status ${request.status}">${request.status}</span></td>
 
 
-                                            <td>${request.processedby.employee.name}</td>
+                                            <td>${request.processedby.username}</td>
                                         </tr>
-                                    </c:if>
+                                    <%--</c:if>--%>
                                 </c:forEach>
                             </tbody>
                         </table>

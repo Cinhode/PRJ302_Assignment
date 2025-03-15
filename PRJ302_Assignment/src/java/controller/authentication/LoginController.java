@@ -34,12 +34,11 @@ public class LoginController extends HttpServlet {
             user.setEmployee(profile);
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
+
             LeaveRequestDBContext ldb = new LeaveRequestDBContext();
-            ArrayList<LeaveRequest> ls = new ArrayList();
-            ls = ldb.list();
+            ArrayList<LeaveRequest> ls = ldb.list();
             session.setAttribute("leaverequest", ls);
-            resp.getWriter().println(ls);
-            //resp.sendRedirect("home");
+            resp.sendRedirect("home");
         } else {
             resp.getWriter().println("Access denied!");
         }
@@ -48,7 +47,7 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        req.getRequestDispatcher("login.html").forward(req, resp);
     }
 
 }

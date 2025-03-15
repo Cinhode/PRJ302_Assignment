@@ -20,8 +20,10 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
 
     @Override
     public ArrayList<LeaveRequest> list() {
+        ArrayList<LeaveRequest> leaverequests = new ArrayList();
+
         try {
-            String sql = "              SELECT lr.[lrid]\n"
+            String sql = "    SELECT lr.[lrid]\n"
                     + "                        ,lr.[title]\n"
                     + "                          ,lr.[reason]\n"
                     + "                         ,lr.[from]\n"
@@ -29,29 +31,41 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
                     + "                         ,lr.[status]\n"
                     + "                        ,lr.[createddate]\n"
                     + "                          ,e.eid\n"
-                    + "                         ,e.ename as [createdbyusername]\n"
+                    + "						,e.ename as [createdbyusername]\n"
                     + "                         ,p.[username] as [processedbyusername]\n"
                     + "                   	  ,p.[displayname] as [processedbydisplayname]\n"
                     + "                      FROM [LeaveRequests] lr\n"
                     + "                    	INNER JOIN Employees e ON e.eid = lr.createdby\n"
-                    + "                    	LEFT JOIN Users p ON p.username = lr.processedby\n";
+                    + "                    	LEFT JOIN Users p ON p.username = lr.processedby";
 
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
-            ArrayList<LeaveRequest> leaverequests = new ArrayList();
-            if (rs.next()) {
+
+            while (rs.next()) {
                 LeaveRequest lr = new LeaveRequest();
                 lr.setId(rs.getInt("lrid"));
                 lr.setTitle(rs.getString("title"));
                 lr.setReason(rs.getString("reason"));
                 lr.setFrom(rs.getDate("from"));
                 lr.setTo(rs.getDate("to"));
-                lr.setStatus(rs.getInt("status"));
+                
+                 String status = rs.getString("status");
+                int s = Integer.parseInt(status);
+                if (s==0) {
+                    lr.setStatus("Pending");
+                }
+                else if(s==1){
+                    lr.setStatus("Approve");
+                }
+                else{
+                    lr.setStatus("Reject");
+                }
+                
                 lr.setCreateddate(rs.getTimestamp("createddate"));
 
                 Employee e = new Employee();
                 e.setId(rs.getInt("eid"));
-                e.setName(rs.getNString("createdbyusername"));
+                e.setName(rs.getString("createdbyusername"));
 
                 lr.setCreatedby(e);
 
@@ -61,14 +75,16 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
                     processby.setUsername(processbyusername);
                     processby.setDisplayname(rs.getString("processedbydisplayname"));
                     lr.setProcessedby(processby);
+                } else {
+                    lr.setProcessedby(null);
                 }
+
                 leaverequests.add(lr);
             }
-            return leaverequests;
         } catch (SQLException ex) {
             Logger.getLogger(LeaveRequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return leaverequests;
     }
 
     @Override
@@ -100,7 +116,19 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
                 lr.setReason(rs.getString("reason"));
                 lr.setFrom(rs.getDate("from"));
                 lr.setTo(rs.getDate("to"));
-                lr.setStatus(rs.getInt("status"));
+
+                String status = rs.getString("status");
+                int s = Integer.parseInt(status);
+                if (s==0) {
+                    lr.setStatus("Pending");
+                }
+                else if(s==1){
+                    lr.setStatus("Approve");
+                }
+                else{
+                    lr.setStatus("Reject");
+                }
+
                 lr.setCreateddate(rs.getTimestamp("createddate"));
 
                 Employee e = new Employee();
