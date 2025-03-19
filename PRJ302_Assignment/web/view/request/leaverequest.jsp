@@ -48,7 +48,7 @@
                         </a>
                     </li>
                     <li><%-- VIEW   --%>
-                        <a href="#">
+                        <a href="http://localhost:8080/Assignment/request/receive">
                             <span class="icon">
                                 <ion-icon name="eye-outline"></ion-icon>
                             </span>

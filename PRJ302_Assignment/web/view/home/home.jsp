@@ -30,15 +30,15 @@
                             </span>
                             <span class="title">Dashboard</span>
                         </a>
-<!--                    </li><%-- CUSTOMER   --%>
-                    <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="people-outline"></ion-icon>
-                            </span>
-                            <span class="title">Customers</span>
-                        </a>
-                    </li>-->
+                        <!--                    </li><%-- CUSTOMER   --%>
+                                            <li>
+                                                <a href="#">
+                                                    <span class="icon">
+                                                        <ion-icon name="people-outline"></ion-icon>
+                                                    </span>
+                                                    <span class="title">Customers</span>
+                                                </a>
+                                            </li>-->
                     <li><%-- CREATE-DONE   --%>
                         <a href="http://localhost:8080/Assignment/request/create">
                             <span class="icon">
@@ -48,7 +48,7 @@
                         </a>
                     </li>
                     <li><%-- VIEW   --%>
-                        <a href="#">
+                        <a href="http://localhost:8080/Assignment/request/receive">
                             <span class="icon">
                                 <ion-icon name="eye-outline"></ion-icon>
                             </span>
@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li><%-- AGENDA   --%>
-                        <a href="#">
+                        <a href="http://localhost:8080/Assignment/view/request/calendar.jsp">
                             <span class="icon">
                                 <ion-icon name="stats-chart-outline"></ion-icon>
                             </span>

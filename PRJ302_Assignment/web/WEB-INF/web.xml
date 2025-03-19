@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
-        <servlet-name>AddLeaveRequest</servlet-name>
-        <servlet-class>controller.request.AddLeaveRequest</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>htmlServlet</servlet-name>
         <jsp-file>/request.html</jsp-file>
     </servlet>
@@ -45,10 +41,6 @@
         <jsp-file>/view/home/viewallhome.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AddLeaveRequest</servlet-name>
-        <url-pattern>/request/add</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>htmlServlet</servlet-name>
         <url-pattern>/request</url-pattern>
     </servlet-mapping>
@@ -87,5 +79,13 @@
     <servlet-mapping>
         <servlet-name>ViewAllHome</servlet-name>
         <url-pattern>/home/view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CalendarServlet</servlet-name>
+        <servlet-class>controller.request.CalendarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CalendarServlet</servlet-name>
+        <url-pattern>/request/calendar</url-pattern>
     </servlet-mapping>
 </web-app>

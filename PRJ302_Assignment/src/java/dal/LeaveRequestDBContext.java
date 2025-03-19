@@ -48,19 +48,17 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
                 lr.setReason(rs.getString("reason"));
                 lr.setFrom(rs.getDate("from"));
                 lr.setTo(rs.getDate("to"));
-                
-                 String status = rs.getString("status");
+
+                String status = rs.getString("status");
                 int s = Integer.parseInt(status);
-                if (s==0) {
+                if (s == 0) {
                     lr.setStatus("Pending");
-                }
-                else if(s==1){
+                } else if (s == 1) {
                     lr.setStatus("Approve");
-                }
-                else{
+                } else {
                     lr.setStatus("Reject");
                 }
-                
+
                 lr.setCreateddate(rs.getTimestamp("createddate"));
 
                 Employee e = new Employee();
@@ -89,54 +87,55 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
 
     @Override
     public LeaveRequest get(int id) {
+        LeaveRequest lr = null; // Định nghĩa biến lr từ đầu
         try {
-            String sql = "              SELECT lr.[lrid]\n"
-                    + "                        ,lr.[title]\n"
-                    + "                          ,lr.[reason]\n"
-                    + "                         ,lr.[from]\n"
-                    + "                        ,lr.[to]\n"
-                    + "                         ,lr.[status]\n"
-                    + "                        ,lr.[createddate]\n"
-                    + "                          ,e.eid\n"
-                    + "                         ,e.ename as [createdbyusername]\n"
-                    + "                         ,p.[username] as [processedbyusername]\n"
-                    + "                   	  ,p.[displayname] as [processedbydisplayname]\n"
-                    + "                      FROM [LeaveRequests] lr\n"
-                    + "                    	INNER JOIN Employees e ON e.eid = lr.createdby\n"
-                    + "                    	LEFT JOIN Users p ON p.username = lr.processedby\n"
-                    + "                             WHERE lr.lrid = ?";
+            String sql = "SELECT lr.[lrid], lr.[title], lr.[reason], lr.[from], lr.[to], "
+                    + "lr.[status], lr.[createddate], e.eid, e.ename AS createdbyusername, "
+                    + "p.[username] AS processedbyusername, p.[displayname] AS processedbydisplayname "
+                    + "FROM [LeaveRequests] lr "
+                    + "INNER JOIN Employees e ON e.eid = lr.createdby "
+                    + "LEFT JOIN Users p ON p.username = lr.processedby "
+                    + "WHERE lr.lrid = ?";
 
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
+
             if (rs.next()) {
-                LeaveRequest lr = new LeaveRequest();
+                lr = new LeaveRequest();  // Khởi tạo đối tượng ở đây
                 lr.setId(rs.getInt("lrid"));
                 lr.setTitle(rs.getString("title"));
                 lr.setReason(rs.getString("reason"));
                 lr.setFrom(rs.getDate("from"));
                 lr.setTo(rs.getDate("to"));
-
-                String status = rs.getString("status");
-                int s = Integer.parseInt(status);
-                if (s==0) {
-                    lr.setStatus("Pending");
-                }
-                else if(s==1){
-                    lr.setStatus("Approve");
-                }
-                else{
-                    lr.setStatus("Reject");
-                }
-
                 lr.setCreateddate(rs.getTimestamp("createddate"));
 
+                // Kiểm tra kiểu dữ liệu của cột "status" và xử lý an toàn
+                String status = rs.getString("status");
+                if (status != null) {
+                    switch (status.trim()) {
+                        case "0":
+                            lr.setStatus("Pending");
+                            break;
+                        case "1":
+                            lr.setStatus("Approve");
+                            break;
+                        case "2":
+                            lr.setStatus("Reject");
+                            break;
+                        default:
+                            lr.setStatus("Unknown");
+                            break;
+                    }
+                }
+
+                // Xử lý thông tin người tạo
                 Employee e = new Employee();
                 e.setId(rs.getInt("eid"));
-                e.setName(rs.getNString("createdbyusername"));
-
+                e.setName(rs.getString("createdbyusername"));
                 lr.setCreatedby(e);
 
+                // Xử lý thông tin người xử lý (nếu có)
                 String processbyusername = rs.getString("processedbyusername");
                 if (processbyusername != null) {
                     User processby = new User();
@@ -144,14 +143,12 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
                     processby.setDisplayname(rs.getString("processedbydisplayname"));
                     lr.setProcessedby(processby);
                 }
-                return lr;
-
             }
+
         } catch (SQLException ex) {
-            Logger.getLogger(LeaveRequestDBContext.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LeaveRequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return lr; // Đảm bảo luôn return lr
     }
 
     @Override
@@ -268,6 +265,61 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public void updatestatus(LeaveRequest model) {
+        try {
+            connection.setAutoCommit(false);
+            String sql = "UPDATE [LeaveRequests]\n"
+                    + "   SET [status] = ?\n"
+                    + " WHERE lrid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, model.getStatus());
+            stm.setInt(2, model.getId());
+            stm.executeUpdate();
+            connection.commit();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(LeaveRequestDBContext.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.rollback();
+
+            } catch (SQLException ex1) {
+                Logger.getLogger(LeaveRequestDBContext.class
+                        .getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+
+            } catch (SQLException ex) {
+                Logger.getLogger(LeaveRequestDBContext.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+            if (connection != null)
+                try {
+                connection.close();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(LeaveRequestDBContext.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public boolean updateStatus(int id, int status) {
+        try {
+            String sql = "UPDATE LeaveRequest SET status = ? WHERE lrid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, status);
+            stm.setInt(2, id);
+            int rowsUpdated = stm.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(LeaveRequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     @Override
