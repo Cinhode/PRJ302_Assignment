@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Leave Request Manager</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+      <link rel="stylesheet" href="${pageContext.request.contextPath}/style/assets/css/style.css">
     </head>
     <body>
         <div class="container">
@@ -29,16 +29,7 @@
                                 <ion-icon name="home-outline"></ion-icon>
                             </span>
                             <span class="title">Dashboard</span>
-                        </a>
-<!--                    </li><%-- CUSTOMER   --%>
-                    <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="people-outline"></ion-icon>
-                            </span>
-                            <span class="title">Customers</span>
-                        </a>
-                    </li>-->
+                        </a>                  
                     <li><%-- CREATE   --%>
                         <a href="http://localhost:8080/Assignment/request/create">
                             <span class="icon">
@@ -85,7 +76,7 @@
                         </label>
                     </div>
                     <div class="user">
-                        <img src="${pageContext.request.contextPath}/assets/image/usericon.png" alt="User">
+                        <img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User">
                     </div>
                 </div>
                 <div class="details">
@@ -96,7 +87,7 @@
                         </div>
                         <div class="leaverequest-container" >
                             <h2>Leave Request</h2>
-                            <form action = "request/create" method="POST" class="login-form">
+                            <form action = "create" method="POST" class="login-form">
 
                                 <div class="input-group">
                                     <label for="title">Title:</label>
@@ -104,7 +95,7 @@
                                 </div>
                                 <div class="input-group">
                                     <label for="name">Name:</label>
-                                    <input type="text" id="name" name="name" value="${sessionScope.user.employee.name}" required><br>
+                                    <input type="text" id="name" name="name" value="${sessionScope.user.employee.name}" readonly><br>
                                 </div>
                                 <div class="input-group">
                                     <label for="startDate">Start Date:</label>
@@ -130,7 +121,7 @@
                             <c:forEach items="${sessionScope.user.employee.staffs}" var="s">
                                 <tr>
                                     <td width="60px">
-                                        <div class="imgBx"><img src="${pageContext.request.contextPath}/assets/image/usericon.png" alt="User"></div>
+                                        <div class="imgBx"><img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User"></div>
                                     </td>
                                     <td>
                                         <h4>${s.name} <br> <span>${s.dept.name}</span></h4>
@@ -142,7 +133,7 @@
                 </div>
             </div>
         </div>
-        <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
+        <script src="${pageContext.request.contextPath}/style/assets/js/main.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     </body>

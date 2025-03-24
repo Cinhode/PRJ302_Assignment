@@ -1,0 +1,254 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.GregorianCalendar" %>
+<%@ page import="java.sql.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Leave Request Manager</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/style/assets/css/style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="navigation">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="logo-octocat"></ion-icon>
+                            </span>
+                            <span class="title">Leave Request Manager</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://localhost:8080/Assignment/home">
+                            <span class="icon">
+                                <ion-icon name="home-outline"></ion-icon>
+                            </span>
+                            <span class="title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://localhost:8080/Assignment/request/create">
+                            <span class="icon">
+                                <ion-icon name="chatbubble-outline"></ion-icon>
+                            </span>
+                            <span class="title">Create</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://localhost:8080/Assignment/request/receive">
+                            <span class="icon">
+                                <ion-icon name="eye-outline"></ion-icon>
+                            </span>
+                            <span class="title">View</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/request/agenda">
+                            <span class="icon">
+                                <ion-icon name="stats-chart-outline"></ion-icon>
+                            </span>
+                            <span class="title">Agenda</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/login">
+                            <span class="icon">
+                                <ion-icon name="log-out-outline"></ion-icon>
+                            </span>
+                            <span class="title">Sign Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="main">
+                <div class="topbar">
+                    <div class="toggle">
+                        <ion-icon name="menu-outline"></ion-icon>
+                    </div>
+                    <div class="search">
+                        <label>
+                            <input type="text" placeholder="Search here">
+                            <ion-icon name="search-outline"></ion-icon>
+                        </label>
+                    </div>
+                    <div class="user">
+                        <img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User">
+                    </div>
+                </div>
+                <div class="details">
+                    <div class="recentOrders">
+                        <div class="cardHeader">
+                            <h2>Agenda<% if (request.getAttribute("staffName") != null) { %> of <%= request.getAttribute("staffName") %><% } %></h2>
+                            <a href="http://localhost:8080/Assignment/home/view" class="btn">View All</a>
+                        </div>
+                        <% 
+                            Calendar currentCal = Calendar.getInstance();
+                            int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
+                            int currentMonth = currentCal.get(Calendar.MONTH);
+                            int currentYear = currentCal.get(Calendar.YEAR);
+
+                            String monthParam = request.getParameter("month");
+                            String yearParam = request.getParameter("year");
+
+                            int displayMonth = monthParam != null ? Integer.parseInt(monthParam) : currentMonth;
+                            int displayYear = yearParam != null ? Integer.parseInt(yearParam) : currentYear;
+
+                            Calendar cal = new GregorianCalendar(displayYear, displayMonth, 1);
+                            int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+                            int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+                            String[] months = {"Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", 
+                                            "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"};
+
+                            int prevMonth = displayMonth - 1;
+                            int prevYear = displayYear;
+                            int nextMonth = displayMonth + 1;
+                            int nextYear = displayYear;
+
+                            if (prevMonth < 0) {
+                                prevMonth = 11;
+                                prevYear--;
+                            }
+                            if (nextMonth > 11) {
+                                nextMonth = 0;
+                                nextYear++;
+                            }
+
+                            java.util.List<model.LeaveRequest> leaveRequests = (java.util.List<model.LeaveRequest>) request.getAttribute("leaveRequests");
+                            String staffName = (String) request.getAttribute("staffName");
+                        %>
+                        <div class="calendar-container">
+                            <h2 class="calendar-header"><%= months[displayMonth] %> <%= displayYear %></h2>
+                            <div class="nav-container">
+                                <div class="nav-buttons">
+                                    <a href="${pageContext.request.contextPath}/request/agenda<% if (staffName != null) { %>?name=<%= staffName %><% } %>?(mysql)month=<%= prevMonth %>&year=<%= prevYear %>"><button>Previous</button></a>
+                                </div>
+                                <div class="selector">
+                                    <form id="calendarForm" method="get" action="${pageContext.request.contextPath}/request/agenda">
+                                        <% if (staffName != null) { %>
+                                        <input type="hidden" name="name" value="<%= staffName %>">
+                                        <% } %>
+                                        <select name="month" onchange="document.getElementById('calendarForm').submit()">
+                                            <% for (int i = 0; i < 12; i++) { %>
+                                            <option value="<%= i %>" <%= i == displayMonth ? "selected" : "" %>><%= months[i] %></option>
+                                            <% } %>
+                                        </select>
+                                        <select name="year" onchange="document.getElementById('calendarForm').submit()">
+                                            <% 
+                                                int startYear = currentYear - 10;
+                                                int endYear = currentYear + 10;
+                                                for (int i = startYear; i <= endYear; i++) { 
+                                            %>
+                                            <option value="<%= i %>" <%= i == displayYear ? "selected" : "" %>><%= i %></option>
+                                            <% } %>
+                                        </select>
+                                    </form>                
+                                </div>
+                                <div class="nav-buttons">
+                                    <a href="${pageContext.request.contextPath}/request/agenda<% if (staffName != null) { %>?name=<%= staffName %><% } %>?month=<%= nextMonth %>&year=<%= nextYear %>"><button>Next</button></a>
+                                </div>
+                            </div>
+                            <table class="calendar-table">
+                                <tr>
+                                    <th class="sunday">CN</th>
+                                    <th>T2</th>
+                                    <th>T3</th>
+                                    <th>T4</th>
+                                    <th>T5</th>
+                                    <th>T6</th>
+                                    <th>T7</th>
+                                </tr>
+                                <%
+                                    int day = 1;
+                                    boolean firstRow = true;
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                
+                                    while (day <= daysInMonth) {
+                                        out.print("<tr>");
+                                    
+                                        for (int i = 1; i <= 7 && day <= daysInMonth; i++) {
+                                            if (firstRow && i < firstDayOfWeek) {
+                                                out.print("<td></td>");
+                                            } else {
+                                                String className = "";
+                                                if (i == 1) className = "sunday";
+                                                if (day == currentDay && displayMonth == currentMonth && displayYear == currentYear) {
+                                                    className += " today";
+                                                }
+
+                                                Calendar currentCellDate = new GregorianCalendar(displayYear, displayMonth, day);
+                                                boolean isLeaveDay = false;
+                                                if (leaveRequests != null) {
+                                                    for (model.LeaveRequest lr : leaveRequests) {
+                                                        Date sqlDateFrom = lr.getFrom();
+                                                        Date sqlDateTo = lr.getTo();
+                                                        Calendar fromCal = Calendar.getInstance();
+                                                        Calendar toCal = Calendar.getInstance();
+                                                        fromCal.setTime(new java.util.Date(sqlDateFrom.getTime()));
+                                                        toCal.setTime(new java.util.Date(sqlDateTo.getTime()));
+
+                                                        if (!currentCellDate.before(fromCal) && !currentCellDate.after(toCal)) {
+                                                            isLeaveDay = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                if (isLeaveDay) {
+                                                    className += " leave-day";
+                                                }
+
+                                                out.print("<td");
+                                                if (!className.isEmpty()) {
+                                                    out.print(" class=\"" + className.trim() + "\"");
+                                                }
+                                                out.print("><span class=\"day-number\">" + day + "</span></td>");
+                                                day++;
+                                            }
+                                        }
+                                        out.print("</tr>");
+                                        firstRow = false;
+                                    }
+                                %>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="recentCustomers">
+                        <div class="cardHeader">
+                            <h2>Your Staff</h2>
+                        </div>
+                        <table>
+                            <c:forEach items="${sessionScope.user.employee.staffs}" var="s">
+                                <tr>
+                                    <td width="60px">
+                                        <div class="imgBx"><img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User"></div>
+                                    </td>
+                                    <td>
+                                        <!-- Bọc toàn bộ h4 trong a để nhấn vào cả ô -->
+                                        <a href="${pageContext.request.contextPath}/request/agenda?name=${s.name}" class="staff-link">
+                                            <h4>
+                                                ${s.name}
+                                                <br>
+                                                <span>${s.dept.name}</span>
+                                            </h4>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="${pageContext.request.contextPath}/style/assets/js/main.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    </body>
+</html>

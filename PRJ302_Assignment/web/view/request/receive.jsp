@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Leave Request Manager</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/style/assets/css/style.css">
     </head>
     <body>
 
@@ -110,18 +110,42 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="request" items="${leaverequest}">
-                                    <tr onclick="showRequestDetails(${request.id})" >
-                                        <td>${request.id}</td>
-                                        <td>${request.createdby.name}</td>
-                                        <td>${request.title}</td>
-                                        <td>${request.from}</td>
-                                        <td>${request.to}</td>
-                                        <td>${request.reason}</td>
-                                        <td><span class="status ${request.status}">${request.status}</span></td>
-                                        <td>${request.processedby.username}</td>
-                                    </tr>
-                                </c:forEach>
+                                <c:choose>
+                                    <c:when test="${not empty leaverequest}">
+                                        <c:forEach var="request" items="${leaverequest}">
+                                            <c:set var="isDirectStaffOrSelf" value="false" />
+                                            <!-- Kiểm tra nếu request.createdby.name là user hiện tại -->
+                                            <c:if test="${request.createdby.name eq sessionScope.user.employee.name}">
+                                                <c:set var="isDirectStaffOrSelf" value="true" />
+                                            </c:if>
+                                            <!-- Kiểm tra nếu request.createdby.name nằm trong direcstaffs -->
+                                            <c:forEach var="staff" items="${sessionScope.user.employee.directstaffs}">
+                                                <c:if test="${request.createdby.name eq staff.name}">
+                                                    <c:set var="isDirectStaffOrSelf" value="true" />
+                                                </c:if>
+                                            </c:forEach>
+                                            <!-- Chỉ hiển thị request nếu thỏa mãn cả 2 điều kiện -->
+                                            <c:if test="${isDirectStaffOrSelf}">
+                                                <tr>
+                                                <tr onclick="showRequestDetails(${request.id})" >
+                                                    <td>${request.id}</td>
+                                                    <td>${request.createdby.name}</td>
+                                                    <td>${request.title}</td>
+                                                    <td>${request.from}</td>
+                                                    <td>${request.to}</td>
+                                                    <td>${request.reason}</td>
+                                                    <td><span class="status ${request.status}">${request.status}</span></td>
+                                                    <td>${request.processedby.username}</td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <tr><td colspan="6">No pending requests found.</td></tr>
+                                    </c:otherwise>
+                                </c:choose>
+
+
                             </tbody>
                         </table>
 
@@ -138,11 +162,11 @@
                                     <p><strong>Reason:</strong> <span id="modalReason"></span></p>
                                     <p><strong>Status:</strong> <span id="modalStatus"></span></p>
                                     <p><strong>Processor:</strong> <span id="modalProcessor"></span></p>
-                                    <c:if test="${modalProcessor == null}">
-                                    <button type="button" id="btnAccept" class="accept-btn">Accept</button>
-                                    <button type="button" id="btnReject" class="reject-btn">Reject</button>
+                                        <c:if test="${modalProcessor == null}">
+                                        <button type="button" id="btnAccept" class="accept-btn">Accept</button>
+                                        <button type="button" id="btnReject" class="reject-btn">Reject</button>
                                     </c:if>
-                                    </form>
+                                </form>
 
                             </div>
                         </div>
@@ -156,7 +180,7 @@
                             <c:forEach items="${sessionScope.user.employee.staffs}" var="s">
                                 <tr>
                                     <td width="60px">
-                                        <div class="imgBx"><img src="${pageContext.request.contextPath}/assets/image/usericon.png" alt="User"></div>
+                                        <div class="imgBx"><img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User"></div>
                                     </td>
                                     <td>
                                         <h4>${s.name} <br> <span>${s.dept.name}</span></h4>
@@ -190,7 +214,7 @@
                             document.getElementById("modalTo").innerText = data.to;
                             document.getElementById("modalReason").innerText = data.reason;
                             document.getElementById("modalStatus").innerText = data.status;
-                            document.getElementById("modalProcessor").innerText = data.processedby ? data.processedby.username : " ";
+                            document.getElementById("modalProcessor").innerText = data.processedby ? data.processedby.username : null;
 
                             // Cập nhật sự kiện cho nút Accept và Reject
                             document.getElementById("btnAccept").onclick = function () {
@@ -218,7 +242,6 @@
                     modal.style.display = "none";
                 }
             }
-
             function updateRequestStatus(id, status) {
                 fetch("http://localhost:8080/Assignment/request/update", {
                     method: "POST",
@@ -227,20 +250,28 @@
                     },
                     body: JSON.stringify({id: id, status: status})
                 })
-                        .then(response => response.json())
-                        .then(data => {
-                            alert(data.message);
-                            closeModal(); // Đóng modal sau khi cập nhật
-                            location.reload(); // Reload trang để cập nhật trạng thái
+                        .then(response => {
+                            console.log("Status: " + response.status); // Log status
+                            return response.text(); // Dùng text() để xem nội dung thô
                         })
-                        .catch(error => console.error("Error:", error));
+                        .then(text => {
+                            console.log("Response text: " + text); // Log response
+                            const data = JSON.parse(text); // Parse thủ công
+                            alert(data.message);
+                            closeModal();
+                            location.reload();
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Có lỗi: " + error.message);
+                        });
             }
 
 
         </script>
 
 
-        <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
+        <script src="${pageContext.request.contextPath}/style/assets/js/main.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     </body>

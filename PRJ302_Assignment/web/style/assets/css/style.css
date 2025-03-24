@@ -307,14 +307,22 @@ body {
     margin-top: 10px;
 }
 
-details .recentOrders {
+.details .recentOrders {
     position: relative;
     display: grid;
+    grid-template-rows: auto 1fr; /* .cardHeader tự co giãn, phần còn lại chiếm hết không gian */
     min-height: 500px;
     background: var(--white);
     padding: 20px;
     box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
     border-radius: 20px;
+}
+.details .recentOrders table {
+    margin: 0;
+    padding: 0;
+}
+.details .recentOrders tbody:empty {
+    display: none; /* Ẩn tbody nếu trống */
 }
 
 .details .cardHeader {
@@ -334,10 +342,6 @@ details .recentOrders {
     color: var(--white);
     border-radius: 6px;
 }
-/*.tddate{
-    content:fit  ;
-
-}*/
 
 .details table {
     width: 100%;
@@ -378,9 +382,9 @@ td {
 .details .recentOrders table tr td:nth-child(3) {
     text-align: center;
 }
-.status.Accept {
+.status.Approve {
     padding: 2px 4px;
-    background: #8de02c;
+    background: #0d9538;
     color: var(--white);
     border-radius: 4px;
     font-size: 14px;
@@ -419,6 +423,7 @@ td {
     background: var(--white);
     box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
     border-radius: 20px;
+    width: 95%;
 }
 .recentCustomers .imgBx {
     position: relative;
@@ -454,6 +459,17 @@ td {
 }
 .recentCustomers table tr:hover td h4 span {
     color: var(--white);
+}
+
+.recentCustomers .staff-link {
+    text-decoration: none;
+    color: var(--black1);
+    display: block; /* Đảm bảo a chiếm toàn bộ không gian ô */
+    transition: color 0.3s;
+}
+
+.recentCustomers table tr:hover .staff-link {
+    color: var(--white); /* Khi hover, màu chữ trắng để nổi trên nền xanh */
 }
 
 /* ====================== Responsive Design ========================== */
@@ -535,6 +551,8 @@ td {
     border-width: 2px ;
     border: 2px solid #2a2185 ;
     overflow: auto;
+    /*    padding-left: 18%;*/
+    margin-left:18%;
 }
 
 ::-webkit-scrollbar {
@@ -585,3 +603,270 @@ td {
     cursor: pointer;
 }
 
+.accept-btn{
+    width: fit-content;
+    margin: auto;
+    text-align: left;
+    position: relative;
+    color: white;
+    background: green;
+    padding: 2px;
+}
+.reject-btn{
+    width: fit-content;
+    text-align: left;
+    position: relative;
+    color: white;
+    background: red;
+    padding: 2px;
+    margin-left: 7px;
+}
+/*====================Calendar=================*/
+.calendar-container {
+    width: 100%;
+    padding: 20px;
+    background: var(--white);
+    border-radius: 10px;
+}
+
+.calendar-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--blue);
+    font-weight: 600;
+}
+
+.nav-container {
+    width: 100%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-buttons button {
+    padding: 8px 20px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nav-buttons button:hover {
+    background: var(--black2);
+}
+
+.selector {
+    display: flex;
+    gap: 10px;
+}
+
+.selector select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--black2);
+    background: var(--white);
+    color: var(--black1);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Tăng specificity cho bảng lịch */
+.recentOrders .calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.recentOrders .calendar-table th {
+    background: var(--blue);
+    color: var(--white);
+    padding: 10px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.recentOrders .calendar-table td {
+    border: 1px solid var(--black2);
+    padding: 10px;
+    text-align: right;
+    vertical-align: top;
+    height: 80px;
+    width: 14.28%;
+    color: var(--black1);
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu mượt mà */
+}
+
+.recentOrders .calendar-table .sunday {
+    color: #ff0000;
+}
+
+.recentOrders .calendar-table .today {
+    background: #ffffcc;
+}
+
+.recentOrders .calendar-table .day-number {
+    display: block;
+    padding: 2px 5px 0 0;
+    transition: color 0.3s; /* Hiệu ứng chuyển màu số */
+}
+
+/* Chỉ ô (td) đổi màu khi hover */
+.recentOrders .calendar-table td:hover {
+    background: var(--blue); /* Ô đổi thành màu xanh khi hover */
+}
+
+/* Số trong ô đổi màu khi hover */
+.recentOrders .calendar-table td:hover .day-number {
+    color: var(--white); /* Số đổi thành màu trắng khi hover */
+}
+
+/* Ngăn hàng (tr) đổi màu khi hover, tăng specificity */
+.recentOrders .calendar-table tr:hover {
+    background: none !important; /* Ngăn hàng đổi màu, ghi đè mọi style khác */
+}
+.recentOrders .calendar-table .leave-day {
+    background: #ff000096; /* Màu đỏ nhạt */
+}
+
+.recentOrders .calendar-table td:hover {
+    background: var(--blue); /* Ô đổi thành màu xanh khi hover */
+}
+
+.recentOrders .calendar-table td:hover .day-number {
+    color: var(--white); /* Số đổi thành màu trắng khi hover */
+}
+
+.recentOrders .calendar-table tr:hover {
+    background: none !important; /* Ngăn hàng đổi màu */
+}
+
+/*========User infor================*/
+.popup {
+    display: none; /* Ẩn mặc định */
+    position: absolute; /* Định vị tuyệt đối */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Đảm bảo nằm trên các phần tử khác */
+    min-width: 150px;
+}
+
+/*.user {
+    position: relative;  Để pop-up định vị tương đối với phần tử cha 
+}*/
+
+.user-icon {
+    cursor: pointer; /* Con trỏ tay khi di chuột vào */
+}
+
+.popup {
+    display: none;
+    transition: opacity 0.3s ease;
+}
+/*====================== Profile =================*/
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.connect-btn, .message-btn {
+    background: none;
+    border: none;
+    color: #ff6f91;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.message-btn {
+    background: #ffe6e6;
+}
+
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.info {
+    margin-bottom: 20px;
+}
+
+.info h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.information {
+    color: #888;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.occupation {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.stat h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.stat p {
+    font-size: 12px;
+    color: #888;
+}
+
+.show-more-btn {
+    background: linear-gradient(45deg, #ff6f91, #ff8e53);
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.show-more-btn:hover {
+    transform: scale(1.05);
+}

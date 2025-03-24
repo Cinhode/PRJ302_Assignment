@@ -308,12 +308,16 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
         }
     }
 
-    public boolean updateStatus(int id, int status) {
+    public boolean updateStatus(int id, int status, User u) {
         try {
-            String sql = "UPDATE LeaveRequest SET status = ? WHERE lrid = ?";
+            String sql = "UPDATE [dbo].[LeaveRequests]\n"
+                    + "   SET [status] = ?\n"
+                    + "      ,[processedby] = ?\n"
+                    + " WHERE lrid = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, status);
-            stm.setInt(2, id);
+            stm.setString(2, u.getUsername());
+            stm.setInt(3, id);
             int rowsUpdated = stm.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException ex) {
@@ -325,6 +329,74 @@ public class LeaveRequestDBContext extends DBContext<LeaveRequest> {
     @Override
     public void delete(LeaveRequest model) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public ArrayList<LeaveRequest> fromtolist(String u) {
+        ArrayList<LeaveRequest> leaverequests = new ArrayList();
+
+        try {
+            String sql = "   SELECT lr.[lrid]\n"
+                    + "                                           ,lr.[title]\n"
+                    + "                                          ,lr.[reason]\n"
+                    + "                                            ,lr.[from]\n"
+                    + "                                          ,lr.[to]\n"
+                    + "                                            ,lr.[status]\n"
+                    + "                                           ,lr.[createddate]\n"
+                    + "                                             ,e.eid\n"
+                    + "                    					,e.ename as [createdbyusername]\n"
+                    + "                                           ,p.[username] as [processedbyusername]\n"
+                    + "                                     	  ,p.[displayname] as [processedbydisplayname]\n"
+                    + "                                      FROM [LeaveRequests] lr\n"
+                    + "                                    	INNER JOIN Employees e ON e.eid = lr.createdby\n"
+                    + "                                        	LEFT JOIN Users p ON p.username = lr.processedby\n"
+                    + "where e.ename = ?";
+
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, u);
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                LeaveRequest lr = new LeaveRequest();
+                lr.setId(rs.getInt("lrid"));
+                lr.setTitle(rs.getString("title"));
+                lr.setReason(rs.getString("reason"));
+                lr.setFrom(rs.getDate("from"));
+                lr.setTo(rs.getDate("to"));
+
+                String status = rs.getString("status");
+                int s = Integer.parseInt(status);
+                if (s == 0) {
+                    lr.setStatus("Pending");
+                } else if (s == 1) {
+                    lr.setStatus("Approve");
+                } else {
+                    lr.setStatus("Reject");
+                }
+
+                lr.setCreateddate(rs.getTimestamp("createddate"));
+
+                Employee e = new Employee();
+                e.setId(rs.getInt("eid"));
+                e.setName(rs.getString("createdbyusername"));
+
+                lr.setCreatedby(e);
+
+                String processbyusername = rs.getString("processedbyusername");
+                if (processbyusername != null) {
+                    User processby = new User();
+                    processby.setUsername(processbyusername);
+                    processby.setDisplayname(rs.getString("processedbydisplayname"));
+                    lr.setProcessedby(processby);
+                } else {
+                    lr.setProcessedby(null);
+                }
+
+                leaverequests.add(lr);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LeaveRequestDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return leaverequests;
     }
 
 }

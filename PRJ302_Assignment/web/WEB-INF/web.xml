@@ -33,12 +33,16 @@
         <jsp-file>/view/home/home.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>CreateLeaveRequest</servlet-name>
-        <servlet-class>controller.request.CreateLeaveRequest</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ViewAllHome</servlet-name>
         <jsp-file>/view/home/viewallhome.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>ProfileController</servlet-name>
+        <servlet-class>controller.request.ProfileController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateLeaveRequest</servlet-name>
+        <servlet-class>controller.request.CreateLeaveRequest</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>htmlServlet</servlet-name>
@@ -73,10 +77,6 @@
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreateLeaveRequest</servlet-name>
-        <url-pattern>/request/create</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ViewAllHome</servlet-name>
         <url-pattern>/home/view</url-pattern>
     </servlet-mapping>
@@ -87,5 +87,13 @@
     <servlet-mapping>
         <servlet-name>CalendarServlet</servlet-name>
         <url-pattern>/request/calendar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileController</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateLeaveRequest</servlet-name>
+        <url-pattern>/request/create</url-pattern>
     </servlet-mapping>
 </web-app>

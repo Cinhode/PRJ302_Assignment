@@ -8,6 +8,6 @@ package controller.request;
  *
  * @author admin
  */
-public class ViewLeaverRequest {
+public class ViewLeaveRequest {
     
 }

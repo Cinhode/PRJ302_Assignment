@@ -6,6 +6,7 @@ package controller.request;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import controller.authentication.BaseRequiredAuthenticationController;
 import dal.LeaveRequestDBContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -15,12 +16,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import model.LeaveRequest;
+import model.User;
 
 /**
  *
  * @author admin
  */
-public class ReceiveLeaveRequest extends HttpServlet {
+public class ReceiveLeaveRequest extends BaseRequiredAuthenticationController {
         @Override
         protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
            
@@ -64,6 +66,16 @@ public class ReceiveLeaveRequest extends HttpServlet {
             req.getRequestDispatcher("/view/request/receive.jsp").forward(req, resp);
         }
 
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
 

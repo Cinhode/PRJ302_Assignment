@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Department;
+import model.User;
 
 /**
  *
@@ -96,7 +97,39 @@ public class EmployeeDBContext extends DBContext<Employee> {
         }
         return null;
     }
-  
+
+    public User getInfor(int id) {
+        User u = null;
+        try {
+            String sql = "select e.eid,e.ename,d.dname,d.did,u.displayname,u.username\n"
+                    + "from Employees e \n"
+                    + "left join Departments d on d.did = e.did\n"
+                    + "left join Users u on e.eid=u.eid\n"
+                    + "where e.eid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Employee e = new Employee();
+                e.setId(rs.getInt("eid"));
+                e.setName(rs.getString("ename"));
+
+                Department d = new Department();
+                d.setDid(rs.getInt("did"));
+                d.setName(rs.getString("dname"));
+                e.setDept(d);
+
+                u.setEmployee(e);
+                u.setUsername(rs.getString("username"));
+                u.setDisplayname(rs.getString("displayname"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // In lỗi ra để debug
+            return null; // Trả về null nếu có lỗi
+        }
+        return u;
+    }
 
     @Override
     public void insert(Employee model) {
