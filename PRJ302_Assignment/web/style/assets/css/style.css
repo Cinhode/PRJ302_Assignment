@@ -870,3 +870,24 @@ td {
 .show-more-btn:hover {
     transform: scale(1.05);
 }
+
+.gantt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.gantt-table th, .gantt-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+.gantt-table th {
+    background-color: #f2f2f2;
+}
+.gantt-table td.staff-name {
+    font-weight: bold;
+    text-align: left;
+}
+.gantt-table td.leave-day {
+    background-color: #ff4d4d; /* Màu đỏ cho ngày nghỉ */
+}

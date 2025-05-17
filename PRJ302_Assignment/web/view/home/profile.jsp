@@ -24,7 +24,7 @@
                         </a>
                     </li>
                     <li> <%-- Profile --%>
-                        <a href="${pageContext.request.contextPath}/profile">
+                        <a href="http://localhost:8080/Assignment/profile">
                             <span class="icon">
                                 <ion-icon name="person-outline"></ion-icon>
                             </span>
@@ -32,14 +32,14 @@
                         </a>
                     </li>
                     <li> <%-- DASHBROAD   --%>
-                        <a href="home">
+                        <a href="http://localhost:8080/Assignment/home">
                             <span class="icon">
                                 <ion-icon name="home-outline"></ion-icon>
                             </span>
                             <span class="title">Dashboard</span>
                         </a>
                     <li><%-- CREATE-DONE   --%>
-                        <a href="request/create">
+                        <a href="http://localhost:8080/Assignment/request/create">
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
@@ -47,7 +47,7 @@
                         </a>
                     </li>
                     <li><%-- VIEW   --%>
-                        <a href="request/receive">
+                        <a href="http://localhost:8080/Assignment/request/receive">
                             <span class="icon">
                                 <ion-icon name="eye-outline"></ion-icon>
                             </span>
@@ -55,7 +55,7 @@
                         </a>
                     </li>
                     <li><%-- AGENDA   --%>
-                        <a href="request/agenda">
+                        <a href="http://localhost:8080/Assignment/request/agenda">
                             <span class="icon">
                                 <ion-icon name="stats-chart-outline"></ion-icon>
                             </span>
@@ -87,8 +87,6 @@
                     <div class="user">
                         <img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User">
                     </div>
-
-
                 </div>
                 <!-- ================ Profile  ================= -->
                 <div class="details">

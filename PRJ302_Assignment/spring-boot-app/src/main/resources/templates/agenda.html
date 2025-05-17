@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Leave Requests</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Leave Requests</h1>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Employee Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="request : ${leaveRequests}">
+                    <td th:text="${request.requestId}"></td>
+                    <td th:text="${request.employee.name}"></td>
+                    <td th:text="${request.startDate}"></td>
+                    <td th:text="${request.endDate}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 class="mt-5">Direct Staffs</h2>
+        <ul>
+            <li th:each="staff : ${directStaffs}" th:text="${staff.name}"></li>
+        </ul>
+    </div>
+</body>
+</html>

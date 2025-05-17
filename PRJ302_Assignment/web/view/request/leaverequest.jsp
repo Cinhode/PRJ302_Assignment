@@ -9,11 +9,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Leave Request Manager</title>
-      <link rel="stylesheet" href="${pageContext.request.contextPath}/style/assets/css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/style/assets/css/style.css">
     </head>
     <body>
         <div class="container">
-            <div class="navigation">
+                       <div class="navigation">
                 <ul>
                     <li>
                         <a href="#">
@@ -23,14 +23,22 @@
                             <span class="title">Leave Request Manager</span>
                         </a>
                     </li>
+                    <li> <%-- Profile --%>
+                        <a href="http://localhost:8080/Assignment/profile">
+                            <span class="icon">
+                                <ion-icon name="person-outline"></ion-icon>
+                            </span>
+                            <span class="title">Profile</span>
+                        </a>
+                    </li>
                     <li> <%-- DASHBROAD   --%>
                         <a href="http://localhost:8080/Assignment/home">
                             <span class="icon">
                                 <ion-icon name="home-outline"></ion-icon>
                             </span>
                             <span class="title">Dashboard</span>
-                        </a>                  
-                    <li><%-- CREATE   --%>
+                        </a>
+                    <li><%-- CREATE-DONE   --%>
                         <a href="http://localhost:8080/Assignment/request/create">
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
@@ -47,7 +55,7 @@
                         </a>
                     </li>
                     <li><%-- AGENDA   --%>
-                        <a href="#">
+                        <a href="http://localhost:8080/Assignment/request/agenda">
                             <span class="icon">
                                 <ion-icon name="stats-chart-outline"></ion-icon>
                             </span>
@@ -75,9 +83,12 @@
                             <ion-icon name="search-outline"></ion-icon>
                         </label>
                     </div>
+
                     <div class="user">
                         <img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User">
                     </div>
+
+
                 </div>
                 <div class="details">
                     <div class="recentOrders">
@@ -118,7 +129,7 @@
                             <h2>Your Staff</h2>
                         </div>
                         <table>
-                            <c:forEach items="${sessionScope.user.employee.staffs}" var="s">
+                            <c:forEach items="${sessionScope.user.employee.directstaffs}" var="s">
                                 <tr>
                                     <td width="60px">
                                         <div class="imgBx"><img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User"></div>

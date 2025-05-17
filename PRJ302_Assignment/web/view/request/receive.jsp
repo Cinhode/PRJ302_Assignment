@@ -24,6 +24,14 @@
                             <span class="title">Leave Request Manager</span>
                         </a>
                     </li>
+                    <li> <%-- Profile --%>
+                        <a href="http://localhost:8080/Assignment/profile">
+                            <span class="icon">
+                                <ion-icon name="person-outline"></ion-icon>
+                            </span>
+                            <span class="title">Profile</span>
+                        </a>
+                    </li>
                     <li> <%-- DASHBROAD   --%>
                         <a href="http://localhost:8080/Assignment/home">
                             <span class="icon">
@@ -31,15 +39,6 @@
                             </span>
                             <span class="title">Dashboard</span>
                         </a>
-                        <!--                    </li><%-- CUSTOMER   --%>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="icon">
-                                                        <ion-icon name="people-outline"></ion-icon>
-                                                    </span>
-                                                    <span class="title">Customers</span>
-                                                </a>
-                                            </li>-->
                     <li><%-- CREATE-DONE   --%>
                         <a href="http://localhost:8080/Assignment/request/create">
                             <span class="icon">
@@ -49,7 +48,7 @@
                         </a>
                     </li>
                     <li><%-- VIEW   --%>
-                        <a href="#">
+                        <a href="http://localhost:8080/Assignment/request/receive">
                             <span class="icon">
                                 <ion-icon name="eye-outline"></ion-icon>
                             </span>
@@ -57,7 +56,7 @@
                         </a>
                     </li>
                     <li><%-- AGENDA   --%>
-                        <a href="#">
+                        <a href="http://localhost:8080/Assignment/request/agenda">
                             <span class="icon">
                                 <ion-icon name="stats-chart-outline"></ion-icon>
                             </span>
@@ -85,8 +84,9 @@
                             <ion-icon name="search-outline"></ion-icon>
                         </label>
                     </div>
+
                     <div class="user">
-                        <img src="${pageContext.request.contextPath}/assets/image/usericon.png" alt="User">
+                        <img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User">
                     </div>
                 </div>
                 <!-- ================ Order Details List ================= -->
@@ -162,7 +162,7 @@
                                     <p><strong>Reason:</strong> <span id="modalReason"></span></p>
                                     <p><strong>Status:</strong> <span id="modalStatus"></span></p>
                                     <p><strong>Processor:</strong> <span id="modalProcessor"></span></p>
-                                        <c:if test="${modalProcessor == null}">
+                                        <c:if test="${modalProcessor == null }">
                                         <button type="button" id="btnAccept" class="accept-btn">Accept</button>
                                         <button type="button" id="btnReject" class="reject-btn">Reject</button>
                                     </c:if>
@@ -177,7 +177,7 @@
                             <h2>Your Staff</h2>
                         </div>
                         <table>
-                            <c:forEach items="${sessionScope.user.employee.staffs}" var="s">
+                            <c:forEach items="${sessionScope.user.employee.directstaffs}" var="s">
                                 <tr>
                                     <td width="60px">
                                         <div class="imgBx"><img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User"></div>
@@ -193,14 +193,20 @@
             </div>
         </div>
         <script>
+            // Hiển thị chi tiết yêu cầu
             function showRequestDetails(id) {
                 if (!id) {
-                    console.error("Invalid ID:", id); // Debugging
+                    console.error("Invalid ID:", id);
                     return;
                 }
-                fetch("http://localhost:8080/Assignment/request/receive?id=" + id)
+
+                fetch(`http://localhost:8080/Assignment/request/receive?id=${id}`)
                         .then(response => {
-                            if (response.headers.get('Content-Type').includes('application/json')) {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            const contentType = response.headers.get('Content-Type');
+                            if (contentType && contentType.includes('application/json')) {
                                 return response.json();
                             } else {
                                 throw new Error('Phản hồi không phải JSON');
@@ -214,34 +220,47 @@
                             document.getElementById("modalTo").innerText = data.to;
                             document.getElementById("modalReason").innerText = data.reason;
                             document.getElementById("modalStatus").innerText = data.status;
-                            document.getElementById("modalProcessor").innerText = data.processedby ? data.processedby.username : null;
+                            document.getElementById("modalProcessor").innerText = data.processedby ? data.processedby.username : "Chưa xử lý";
 
-                            // Cập nhật sự kiện cho nút Accept và Reject
-                            document.getElementById("btnAccept").onclick = function () {
-                                updateRequestStatus(data.id, 1); // 1 = Accept
-                            };
-                            document.getElementById("btnReject").onclick = function () {
-                                updateRequestStatus(data.id, 2); // 2 = Reject
-                            };
+                            // Lấy các nút Accept và Reject
+                            const btnAccept = document.getElementById("btnAccept");
+                            const btnReject = document.getElementById("btnReject");
+
+                            // Gắn sự kiện chỉ khi nút tồn tại
+                            if (btnAccept) {
+                                btnAccept.onclick = function () {
+                                    updateRequestStatus(data.id, 1); // 1 = Accept
+                                };
+                            }
+                            if (btnReject) {
+                                btnReject.onclick = function () {
+                                    updateRequestStatus(data.id, 2); // 2 = Reject
+                                };
+                            }
 
                             // Hiển thị modal
                             document.getElementById("requestModal").style.display = "block";
                         })
-                        .catch(error => console.error("Error:", error));
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Lỗi khi tải chi tiết yêu cầu: " + error.message);
+                        });
             }
 
-// Đóng modal khi nhấn ra ngoài
+// Đóng modal
             function closeModal() {
                 document.getElementById("requestModal").style.display = "none";
             }
 
-// Đóng modal khi click ra ngoài vùng modal-content
+// Đóng modal khi click ra ngoài
             window.onclick = function (event) {
-                let modal = document.getElementById("requestModal");
+                const modal = document.getElementById("requestModal");
                 if (event.target === modal) {
                     modal.style.display = "none";
                 }
-            }
+            };
+
+// Cập nhật trạng thái yêu cầu
             function updateRequestStatus(id, status) {
                 fetch("http://localhost:8080/Assignment/request/update", {
                     method: "POST",
@@ -251,11 +270,13 @@
                     body: JSON.stringify({id: id, status: status})
                 })
                         .then(response => {
-                            console.log("Status: " + response.status); // Log status
-                            return response.text(); // Dùng text() để xem nội dung thô
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.text(); // Dùng text() để linh hoạt xử lý
                         })
                         .then(text => {
-                            console.log("Response text: " + text); // Log response
+                            console.log("Response text:", text);
                             const data = JSON.parse(text); // Parse thủ công
                             alert(data.message);
                             closeModal();
@@ -263,14 +284,10 @@
                         })
                         .catch(error => {
                             console.error("Error:", error);
-                            alert("Có lỗi: " + error.message);
+                            alert("Có lỗi khi cập nhật trạng thái: " + error.message);
                         });
             }
-
-
         </script>
-
-
         <script src="${pageContext.request.contextPath}/style/assets/js/main.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

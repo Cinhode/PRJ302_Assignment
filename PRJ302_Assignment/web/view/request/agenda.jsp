@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.GregorianCalendar" %>
 <%@ page import="java.sql.Date" %>
-<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="model.Employee" %> <!-- Thêm import cho model.Employee -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,9 +12,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Leave Request Manager</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/style/assets/css/style.css">
+        <style>
+            .leave-table td, .leave-table th {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+            .leave-day {
+                background-color: #ffcccc; /* Màu đỏ nhạt cho ngày nghỉ */
+            }
+        </style>
     </head>
     <body>
         <div class="container">
+            <!-- Navigation giữ nguyên -->
             <div class="navigation">
                 <ul>
                     <li>
@@ -24,6 +34,14 @@
                                 <ion-icon name="logo-octocat"></ion-icon>
                             </span>
                             <span class="title">Leave Request Manager</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://localhost:8080/Assignment/profile">
+                            <span class="icon">
+                                <ion-icon name="person-outline"></ion-icon>
+                            </span>
+                            <span class="title">Profile</span>
                         </a>
                     </li>
                     <li>
@@ -51,7 +69,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="${pageContext.request.contextPath}/request/agenda">
+                        <a href="http://localhost:8080/Assignment/request/agenda">
                             <span class="icon">
                                 <ion-icon name="stats-chart-outline"></ion-icon>
                             </span>
@@ -86,12 +104,11 @@
                 <div class="details">
                     <div class="recentOrders">
                         <div class="cardHeader">
-                            <h2>Agenda<% if (request.getAttribute("staffName") != null) { %> of <%= request.getAttribute("staffName") %><% } %></h2>
+                            <h2>Leave Agenda<% if (request.getAttribute("staffName") != null) { %> of <%= request.getAttribute("staffName") %><% } else { %> of All Direct Staff<% } %></h2>
                             <a href="http://localhost:8080/Assignment/home/view" class="btn">View All</a>
                         </div>
                         <% 
                             Calendar currentCal = Calendar.getInstance();
-                            int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
                             int currentMonth = currentCal.get(Calendar.MONTH);
                             int currentYear = currentCal.get(Calendar.YEAR);
 
@@ -102,7 +119,6 @@
                             int displayYear = yearParam != null ? Integer.parseInt(yearParam) : currentYear;
 
                             Calendar cal = new GregorianCalendar(displayYear, displayMonth, 1);
-                            int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
                             int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
                             String[] months = {"Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", 
@@ -123,25 +139,26 @@
                             }
 
                             java.util.List<model.LeaveRequest> leaveRequests = (java.util.List<model.LeaveRequest>) request.getAttribute("leaveRequests");
+                            java.util.List<model.Employee> directStaffs = (java.util.List<model.Employee>) request.getAttribute("directStaffs");
                             String staffName = (String) request.getAttribute("staffName");
                         %>
-                        <div class="calendar-container">
-                            <h2 class="calendar-header"><%= months[displayMonth] %> <%= displayYear %></h2>
+                        <div class="table-container">
+                            <h2><%= months[displayMonth] %> <%= displayYear %></h2>
                             <div class="nav-container">
                                 <div class="nav-buttons">
-                                    <a href="${pageContext.request.contextPath}/request/agenda<% if (staffName != null) { %>?name=<%= staffName %><% } %>?(mysql)month=<%= prevMonth %>&year=<%= prevYear %>"><button>Previous</button></a>
+                                    <a href="${pageContext.request.contextPath}/request/agenda<% if (staffName != null) { %>?name=<%= staffName %><% } %>?month=<%= prevMonth %>&year=<%= prevYear %>"><button>Previous</button></a>
                                 </div>
                                 <div class="selector">
-                                    <form id="calendarForm" method="get" action="${pageContext.request.contextPath}/request/agenda">
+                                    <form id="monthForm" method="get" action="${pageContext.request.contextPath}/request/agenda">
                                         <% if (staffName != null) { %>
                                         <input type="hidden" name="name" value="<%= staffName %>">
                                         <% } %>
-                                        <select name="month" onchange="document.getElementById('calendarForm').submit()">
+                                        <select name="month" onchange="document.getElementById('monthForm').submit()">
                                             <% for (int i = 0; i < 12; i++) { %>
                                             <option value="<%= i %>" <%= i == displayMonth ? "selected" : "" %>><%= months[i] %></option>
                                             <% } %>
                                         </select>
-                                        <select name="year" onchange="document.getElementById('calendarForm').submit()">
+                                        <select name="year" onchange="document.getElementById('monthForm').submit()">
                                             <% 
                                                 int startYear = currentYear - 10;
                                                 int endYear = currentYear + 10;
@@ -150,72 +167,80 @@
                                             <option value="<%= i %>" <%= i == displayYear ? "selected" : "" %>><%= i %></option>
                                             <% } %>
                                         </select>
-                                    </form>                
+                                    </form>
                                 </div>
                                 <div class="nav-buttons">
                                     <a href="${pageContext.request.contextPath}/request/agenda<% if (staffName != null) { %>?name=<%= staffName %><% } %>?month=<%= nextMonth %>&year=<%= nextYear %>"><button>Next</button></a>
                                 </div>
                             </div>
-                            <table class="calendar-table">
+                            <table class="leave-table">
                                 <tr>
-                                    <th class="sunday">CN</th>
-                                    <th>T2</th>
-                                    <th>T3</th>
-                                    <th>T4</th>
-                                    <th>T5</th>
-                                    <th>T6</th>
-                                    <th>T7</th>
+                                    <th>Staff Name</th>
+                                    <% for (int day = 1; day <= daysInMonth; day++) { %>
+                                    <th><%= day %></th>
+                                    <% } %>
                                 </tr>
-                                <%
-                                    int day = 1;
-                                    boolean firstRow = true;
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                
-                                    while (day <= daysInMonth) {
-                                        out.print("<tr>");
-                                    
-                                        for (int i = 1; i <= 7 && day <= daysInMonth; i++) {
-                                            if (firstRow && i < firstDayOfWeek) {
-                                                out.print("<td></td>");
-                                            } else {
-                                                String className = "";
-                                                if (i == 1) className = "sunday";
-                                                if (day == currentDay && displayMonth == currentMonth && displayYear == currentYear) {
-                                                    className += " today";
-                                                }
-
-                                                Calendar currentCellDate = new GregorianCalendar(displayYear, displayMonth, day);
-                                                boolean isLeaveDay = false;
-                                                if (leaveRequests != null) {
-                                                    for (model.LeaveRequest lr : leaveRequests) {
-                                                        Date sqlDateFrom = lr.getFrom();
-                                                        Date sqlDateTo = lr.getTo();
-                                                        Calendar fromCal = Calendar.getInstance();
-                                                        Calendar toCal = Calendar.getInstance();
-                                                        fromCal.setTime(new java.util.Date(sqlDateFrom.getTime()));
-                                                        toCal.setTime(new java.util.Date(sqlDateTo.getTime()));
-
-                                                        if (!currentCellDate.before(fromCal) && !currentCellDate.after(toCal)) {
-                                                            isLeaveDay = true;
-                                                            break;
-                                                        }
+                                <% 
+                                    if (staffName != null) { 
+                                %>
+                                <tr>
+                                    <td><%= staffName %></td>
+                                    <% 
+                                        for (int day = 1; day <= daysInMonth; day++) { 
+                                            Calendar currentCellDate = new GregorianCalendar(displayYear, displayMonth, day);
+                                            boolean isLeaveDay = false;
+                                            if (leaveRequests != null) {
+                                                for (model.LeaveRequest lr : leaveRequests) {
+                                                    Date sqlDateFrom = lr.getFrom();
+                                                    Date sqlDateTo = lr.getTo();
+                                                    Calendar fromCal = Calendar.getInstance();
+                                                    Calendar toCal = Calendar.getInstance();
+                                                    fromCal.setTime(new java.util.Date(sqlDateFrom.getTime()));
+                                                    toCal.setTime(new java.util.Date(sqlDateTo.getTime()));
+                                                    if (!currentCellDate.before(fromCal) && !currentCellDate.after(toCal)) {
+                                                        isLeaveDay = true;
+                                                        break;
                                                     }
                                                 }
-                                                if (isLeaveDay) {
-                                                    className += " leave-day";
-                                                }
-
-                                                out.print("<td");
-                                                if (!className.isEmpty()) {
-                                                    out.print(" class=\"" + className.trim() + "\"");
-                                                }
-                                                out.print("><span class=\"day-number\">" + day + "</span></td>");
-                                                day++;
                                             }
+                                    %>
+                                    <td <%= isLeaveDay ? "class=\"leave-day\"" : "" %>></td>
+                                    <% } %>
+                                </tr>
+                                <% 
+                                    } else if (directStaffs != null) { 
+                                        // Hiển thị tất cả direct staff
+                                        for (model.Employee staff : directStaffs) { // Sử dụng model.Employee
+                                %>
+                                <tr>
+                                    <td><%= staff.getName() %></td>
+                                    <% 
+                                        for (int day = 1; day <= daysInMonth; day++) { 
+                                            Calendar currentCellDate = new GregorianCalendar(displayYear, displayMonth, day);
+                                            boolean isLeaveDay = false;
+                                            if (leaveRequests != null) {
+                                                for (model.LeaveRequest lr : leaveRequests) {
+                                                    Date sqlDateFrom = lr.getFrom();
+                                                    Date sqlDateTo = lr.getTo();
+                                                    Calendar fromCal = Calendar.getInstance();
+                                                    Calendar toCal = Calendar.getInstance();
+                                                    fromCal.setTime(new java.util.Date(sqlDateFrom.getTime()));
+                                                    toCal.setTime(new java.util.Date(sqlDateTo.getTime()));
+                                                    // Giả định LeaveRequest có getEmployee() trả về Employee
+                                                    if (!currentCellDate.before(fromCal) && !currentCellDate.after(toCal) && 
+                                                        lr.getEmployee() != null && lr.getEmployee().getName().equals(staff.getName())) { 
+                                                        isLeaveDay = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                    %>
+                                    <td <%= isLeaveDay ? "class=\"leave-day\"" : "" %>></td>
+                                    <% } %>
+                                </tr>
+                                <% 
                                         }
-                                        out.print("</tr>");
-                                        firstRow = false;
-                                    }
+                                    } 
                                 %>
                             </table>
                         </div>
@@ -225,13 +250,12 @@
                             <h2>Your Staff</h2>
                         </div>
                         <table>
-                            <c:forEach items="${sessionScope.user.employee.staffs}" var="s">
+                            <c:forEach items="${sessionScope.user.employee.directstaffs}" var="s">
                                 <tr>
                                     <td width="60px">
                                         <div class="imgBx"><img src="${pageContext.request.contextPath}/style/assets/image/usericon.png" alt="User"></div>
                                     </td>
                                     <td>
-                                        <!-- Bọc toàn bộ h4 trong a để nhấn vào cả ô -->
                                         <a href="${pageContext.request.contextPath}/request/agenda?name=${s.name}" class="staff-link">
                                             <h4>
                                                 ${s.name}
